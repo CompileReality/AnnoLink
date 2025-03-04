@@ -27,4 +27,4 @@ Contribution are welcome! If you'd like to improve **AnnoLink**, feel free to su
 # About
 Created by Prathmesh kumbhar.
 If you have any questions or suggestion, feel free to reach out. 
-Gmail ID : kumbharprathmesh@gmail.com
+Gmail ID : kumbharprathmesh213@gmail.com
