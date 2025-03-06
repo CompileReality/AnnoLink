@@ -1,30 +1,110 @@
 # AnnoLink
-**AnnoLink** is Light weight java library for replacing explicit functional interfaces.This library is based on annotation based Method passing. This type of Method execution can be performed dynamically also.
 
+**AnnoLink** is a lightweight Java framework that enables **annotation-based method execution** using reflection. It allows dynamic function invocation without hardcoding method names, making it ideal for **command systems, scripting, and plugin-based architectures**.
 
-# Features
-1. Annotation-Based Method Passing
-2. Type-Safe and Flexible
-3. Works with Any Method
-4. Clean and Readable Code
-5. Lightweight and Fast
-6. Compatible with Existing Java Code
-7. Ideal for Functional and Driven Programming
+## Features
 
+✔ **Annotation-driven execution** – Uses `@Executable` to mark methods for dynamic invocation.  
+✔ **Reflection-based method lookup** – Finds and executes methods based on an assigned key.  
+✔ **Lightweight and flexible** – No external dependencies, works seamlessly with any Java project.  
+✔ **Encapsulated execution** – Cleanly handles method calls without exposing internal logic.  
 
-# How It Works
-1. Annotate the method which is to be called, with `@Executable(key = "[KEY]")`.
-2. Now Create a instance of `Function` with same key as above i.e. [KEY].
-3. Now call `execute` method of `Function` class and pass the list of Arguments required to the method which is to be called.
-4. The method will be executed on same thread and return the result.
-    
-   > Replace [KEY] with any string you want.
+---
 
+## Installation
 
-# Contributions
-Contribution are welcome! If you'd like to improve **AnnoLink**, feel free to submit a pull request.
+Simply copy `Function.java` and `Executable.java` into your Java project. No external dependencies are required.  
 
-# About
-Created by Prathmesh kumbhar.
-If you have any questions or suggestion, feel free to reach out. 
-Gmail ID : kumbharprathmesh213@gmail.com
+---
+
+## Usage
+
+### 1. Define Executable Methods
+
+Mark methods with `@Executable`, assigning a unique key for identification.
+
+```java
+public class MyClass {
+
+    @Executable(key = "greet")
+    public String greet(String name) {
+        return "Hello, " + name + "!";
+    }
+
+    @Executable(key = "add")
+    public int add(int a, int b) {
+        return a + b;
+    }
+}
+```
+
+### 2. Create and Execute Functions
+
+Use the `Function` class to dynamically execute methods based on their assigned key.
+
+```java
+public class Main {
+    public static void main(String[] args) {
+        MyClass obj = new MyClass();
+
+        // Creating a Function instance for "greet"
+        Function greetFunction = new Function("greet", obj);
+        Object result = greetFunction.execute(new Object[]{"John"});
+        System.out.println(result); // Output: Hello, John!
+
+        // Creating a Function instance for "add"
+        Function addFunction = new Function("add", obj);
+        Object sum = addFunction.execute(new Object[]{5, 10});
+        System.out.println(sum); // Output: 15
+    }
+}
+```
+
+---
+
+## Class & Annotation Overview
+
+### `@Executable` Annotation
+
+```java
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface Executable {
+    String key();
+}
+```
+- Marks a method for dynamic execution.  
+- Requires a **unique key** to identify the method.  
+
+### `Function` Class
+
+```java
+public class Function {
+    private final String KEY;
+    private final Object Class;
+
+    public Function(String key, Object Class) { ... }
+
+    public Object execute(Object[] param) { ... }
+}
+```
+- Searches for methods annotated with `@Executable`.  
+- Matches the method using the provided key.  
+- Executes the method using Java reflection.  
+
+---
+
+## Use Cases
+
+🔹 **Command Execution Systems** – Run functions dynamically based on user input.  
+🔹 **Plugin-based Architectures** – Load and execute methods from external modules.  
+🔹 **Scripting & Automation** – Invoke different functions dynamically using script instructions.  
+🔹 **Event-driven Applications** – Trigger actions dynamically based on runtime conditions.  
+
+---
+
+## Notes
+
+- The method signature must match the provided parameters.  
+- If no matching method is found, the function returns `null`.  
+- If the method returns `void`, the return value should be ignored.  
